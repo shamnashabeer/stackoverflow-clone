@@ -8,6 +8,7 @@ import Avatar from '../../components/Avatar/Avatar'
 import moment from 'moment'
 import EditProfileForm from './EditProfileForm'
 import ProfileBio from './ProfileBio'
+import './UserProfile.css'
 
 const UserProfile = () => {
 
@@ -24,19 +25,19 @@ const UserProfile = () => {
             <section>
                 <div className='user-details-container'>
                     <div className='user-details'>
-                        <div className='user-font'>
+                        {/* <div className='user-font'> */}
                         <Avatar backgroundColor="orange" color='white' fontSize={20} px='40px' py='30px'  >
                             {currentProfile?.name.charAt(0).toUpperCase()}
 
                         </Avatar>
-                        </div>
+                        {/* </div> */}
                         <div className='user-name'>
                             <h1>{currentProfile?.name}</h1>
-                            <p><FontAwesomeIcon icon={faBirthdayCake}/> Joined {moment(currentProfile?.joinedOn).fromNow()}</p>
+                            <p><FontAwesomeIcon icon={faBirthdayCake}/> Joined{" "} {moment(currentProfile?.joinedOn).fromNow()}</p>
                         </div>
                     </div>
                     {
-                        currentUser?.result._id === id && (
+                        currentUser?.result?._id === id && (
                             <button className='edit-profile-btn' type='button' onClick={() => setSwitch(true)} >
                                 <FontAwesomeIcon icon={faPen}/> Edit Profile
                             </button>

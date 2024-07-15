@@ -25,10 +25,10 @@ const Auth = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if(!email && !password){
+    if (!email && !password){
       alert('Enter email and password') 
     }
-    if(isSignup){
+    if (isSignup){
       if(!name){
         alert("Enter a name to continue")
       }
@@ -46,7 +46,7 @@ const Auth = () => {
       <section className='auth-section'>
       { isSignup && <AboutAuth/>}
                <div className='auth-container-2'>
-           { !isSignup && <img src={icon} width={80} alt='stack-overflow' className='login-logo'/>}
+           <img src={icon} width={80} alt='stack-overflow' className='login-logo'/>
           <form onSubmit={handleSubmit}>
             {
                  isSignup && (
@@ -74,20 +74,20 @@ const Auth = () => {
                       setEmail(e.target.value);
                     }}/>
                </label>
- <label htmlFor="password">
-   <div style={{display:"flex", justifyContent:"space-between"}}>        
-             <h4>Password</h4>
-                {!isSignup && <p style={{color:"#007ac6",fontSize:"13px"}}>forgot password?</p>}
+                <label htmlFor="password">
+                  <div style={{display:"flex", justifyContent:"space-between"}}>        
+                  <h4>Password</h4> 
+                {!isSignup && (<p style={{color:"#007ac6",fontSize:"13px"}}>forgot password?</p>)}
                  </div>
 
                <input 
-type="password"
- name='password'
-  id='passsword' 
-  value={password}
-  onChange={(e) =>{
-    setPassword(e.target.value);
-  }}/>
+                type="password"
+                  name='password'
+                  id='passsword' 
+                  value={password}
+                  onChange={(e) =>{
+                   setPassword(e.target.value);
+                }}/>
                  { isSignup && <p style={{color:"#666767",fontSize:"13px"}}>Passwords must contain at least eight<br/> characters, including  at least 1 letter and 1 <br /> number</p>}
                 </label>
                  {

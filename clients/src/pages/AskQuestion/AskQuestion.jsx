@@ -15,9 +15,22 @@ const AskQuestion = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault()
+        if(User){
+        if (questionTitle && questionBody && questionTags) {
+            dispatch(
+                askQuestion(
+                    {
+                        questionTitle,questionBody,questionTags,
+                    },
+                    navigate
+                )
+            );
+        } else alert("Please enter all fields")
         // console.log({ questionTitle, questionBody, questionTags})
-        dispatch(askQuestion({ questionBody, questionTitle, questionTags, userPosted: User.result.name, userId: User?.result?._id}, navigate))
-    }
+        // console.log(User.result?._id)
+        // dispatch(askQuestion({ questionBody, questionTitle, questionTags, userPosted: User.result.name, userId: User?.result?._id}, navigate))
+    }else alert('Login to ask question')
+} 
 
     const handleEnter = (e) => {
         if(e.key === 'Enter'){

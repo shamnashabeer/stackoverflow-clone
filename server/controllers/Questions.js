@@ -3,7 +3,8 @@ import mongoose from 'mongoose'
 
 export const AskQuestion = async (req, res) => {
     const postQuestionData = req.body;
-    const postQuestion = new Questions(postQuestionData);
+    const userPosted = req.userId;
+    const postQuestion = new Questions({ ...postQuestionData, userPosted });
     try {
         await postQuestion.save();
         res.status(200).json("Posted a question successfully")
@@ -15,30 +16,30 @@ export const AskQuestion = async (req, res) => {
 
 export const getAllQuestions = async (req, res) => {
     try {
-        const questionList = await Questions.find();
+        const questionList = await Questions.find().sort({ askedOn: -1});
         res.status(200).json(questionList);
     } catch (error) {
-        res.status(500).json({ message: error.message}); 
+        res.status(404).json({ message: error.message}); 
     }
 }                       
 
 export const deleteQuestion = async (req, res) => {
     const { id: _id} = req.params;
     if (!mongoose.Types.ObjectId.isValid(_id)) {
-        return res.status(500).send('question unavailable...');
+        return res.status(404).send('question unavailable...');
     }
     try {
         await Questions.findByIdAndDelete(_id);
         res.status(200).json({ message: "successfully deleted..."});
     } catch (error) {
-        console.log(error)
-        res.status(500).json({message: error.message});
+        res.status(404).json({message: error.message});
     }
 }
 
 export const voteQuestion = async (req, res) => {
     const { id: _id } = req.params;
-    const { value, userId } = req.body;
+    const { value } = req.body;
+    const userId = req.userId;
 
     if (!mongoose.Types.ObjectId.isValid(_id)) {
         return res.status(404).send('question unavailable...');
@@ -50,17 +51,17 @@ export const voteQuestion = async (req, res) => {
         const downIndex = question.downVote.findIndex((id) => id === String(userId))
 
         if(value === 'upVote'){
-            if(downIndex !== -1){
+            if (downIndex !== -1){
                 question.downVote = question.downVote.filter((id) => id !== String(userId))
             }
-            if(upIndex === -1){
+            if (upIndex === -1){
                 question.upVote.push(userId)
             }else{
                 question.upVote = question.upVote.filter((id) => id !== String(userId))
             }
         
-        }else if(value === 'downVote'){
-            if(upIndex !== -1){
+        }else if (value === 'downVote'){
+            if (upIndex !== -1){
                 question.upVote = question.upVote.filter((id) => id !== String(userId))
             }
             if(downIndex === -1){
@@ -72,7 +73,8 @@ export const voteQuestion = async (req, res) => {
         await Questions.findByIdAndUpdate( _id, question )
         res.status(200).json({ message: "voted successfully..."})
     } catch (error) {
-        res.status(404).json({ message: "id not found"})
+        res.status(404).json({ message: "id not found"});
+        return
         
     }
 

@@ -1,9 +1,9 @@
 import mongoose from 'mongoose'
-import User from '../models/auth.js'
+import users from '../models/auth.js'
 
 export const getAllUsers = async (req,res) => {
     try {
-        const allUsers = await User.find();
+        const allUsers = await users.find();
         const allUserDetails = [];
         allUsers.forEach((user)=> {
             allUserDetails.push({ _id: user._id, name: user.name, about: user.about, tags: user.tags, joinedOn: user.joinedOn})
@@ -23,7 +23,7 @@ export const updateProfile = async (req, res) => {
 
     }
     try {
-        const updatedProfile = await User.findByIdAndUpdate( _id, { $set: { 'name':name, 'about':about, 'tags':tags}}, { new: true });
+        const updatedProfile = await users.findByIdAndUpdate( _id, { $set: { name:name, about:about, tags:tags}}, { new: true });
         res.status(200).json(updatedProfile)
     } catch (error) {
         res.status(405).json({ message: error.message })    

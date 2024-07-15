@@ -5,20 +5,20 @@ import users from '../models/auth.js'
 
 export const signup = async (req, res) => {
     const { name, email, password} = req.body;
-    // console.log(req.body)
     try{
         const existinguser = await users.findOne({ email });
-        if(existinguser){
+        if(existinguser) {
             return res.status(404).json({ message: "User already exist."});
         }
 
         const hashedPassword = await bcrypt.hash(password, 12);
         const newUser = await users.create({ name, email, password:hashedPassword });
-        const token = jwt.sign({ email: newUser.email, id:newUser._id}, process.env.JWT_SECRET, { expiresIn: '1h'});
+        const token = jwt.sign({
+             email: newUser.email, id:newUser._id}, process.env.JWT_SECRET, { expiresIn: '1h'});
         res.status(200).json({ result: newUser, token});
     } catch(error){
-        console.log(error)
          res.status(500).json("Something went wrong...")
+         return
     }
 };
 
@@ -40,7 +40,6 @@ export const login = async (req, res) => {
         res.status(200).json({ result: existinguser, token})
 
     } catch (error){
-        console.log(error)
         res.status(500).json("Something went wrong...");
 
     }
